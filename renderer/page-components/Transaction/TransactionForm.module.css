@@ -1,0 +1,88 @@
+.container{
+    position: absolute;
+}
+.container p{
+    margin:0;
+    width: 25.5vw;
+}
+.numdisplay{
+    font-size: 3.5vw; text-align: right;
+}
+.keyboard {  
+margin: 0;  
+padding: 0;  
+list-style: none;  
+}  
+.keyboard li {  
+float: left;  
+margin: 0 5px 5px 0;  
+width: 8vw;  
+height: 6vw;  
+font-size: 2.5vw;
+line-height: 5vw;  
+text-align: center;  
+background: #fff;  
+border: 1px solid #dadada;  
+border-radius: 5px;  
+}
+.keyboard li:active{
+    background-color: red;
+    color: #fff;
+}
+.capslock, .tab, .left-shift, .clearl, .switch {  
+clear: left;  
+}  
+.keyboard .tab, .keyboard .delete {  
+width: 70px;  
+}  
+.keyboard .capslock {  
+width: 80px;  
+}  
+.keyboard .return {  
+width: 90px;  
+}  
+.keyboard .left-shift{  
+width: 70px;  
+}  
+
+.keyboard .switch {
+width: 90px;
+}
+.keyboard .rightright-shift {  
+width: 109px;  
+}  
+.lastitem {  
+margin-right: 0;  
+}  
+.uppercase {  
+text-transform: uppercase;  
+}  
+.keyboard .space {  
+float: left;
+width: 25vw;  
+}  
+.keyboard .switch, .keyboard .space, .keyboard .return{
+font-size: 2.5vw;
+}
+.on {  
+display: none;  
+}  
+.keyboard li:hover {  
+position: relative;  
+top: 1px;  
+left: 1px;  
+border-color: #e5e5e5;  
+cursor: pointer;  
+}  
+
+.datainfo p{
+    font-size: 2.5vw;
+    line-height: 1em;
+}
+
+.error{
+    display: block;
+    text-align: center;
+    color: red;
+    font-size: 2.5vw;
+}
