@@ -1,5 +1,5 @@
 ### Project Name
-Sync App Project
+Sync Kiosk Project
 
 ### Project Description
-Sync App Project
+Sync Kiosk Project
