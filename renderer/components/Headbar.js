@@ -16,12 +16,14 @@ import Typography from '@mui/material/Typography';
 import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
 import Help  from '@mui/icons-material/Help';
 import Button from '@mui/material/Button';
+import MaintenanceAlert from './MaintenanceAlert';
 
 function Headbar({props}) {
 
   return (
     <Box sx={{ flexGrow: 1}}>
       <CssBaseline />
+      <MaintenanceAlert />
       <AppBar component="nav" position="static">
         <Toolbar>
           

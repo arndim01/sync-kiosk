@@ -72,11 +72,6 @@ const InsertMoneyDialog = ({initialTransaction}) => {
         setOpen(false);
     };
 
-    const handleProceed = () => {
-
-    };
-
-
     return(
         <>
             <Dialog
@@ -129,7 +124,6 @@ const InsertMoneyDialog = ({initialTransaction}) => {
                         </Grid>
                     </Grid>
                 </Wrapper>
-                
             </Dialog>
         </>
     );

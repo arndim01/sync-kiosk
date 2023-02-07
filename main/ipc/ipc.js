@@ -6,6 +6,16 @@ const store = new Store();
 
 
 const init = (mainWindow) => {
+
+    ipcMain.on('getConfig', (event, arg) => {
+        event.returnValue = {
+            API_HEARTBEAT_URL: process.env.API_QUEUE_URL,
+            TOKEN: process.env.TOKEN,
+            ACC: process.env.ACC,
+            PWD: process.env.PWD,
+            IsProd: process.env.NODE_ENV === 'production',
+        };
+    });
     
     ipcMain.on('createTransaction', (event, arg) => {
         const headers = {
@@ -51,6 +61,32 @@ const init = (mainWindow) => {
         })
     });
 
+    ipcMain.on('getHeartbeat', (event, arg) => {
+        const headers = {
+            'x-api-key': process.env.TOKEN
+        }
+        axios.get(process.env.API_HEARTBEAT_URL + '?machine=no', {
+            headers: headers
+        }).then((response) => {
+            if( response.status == 200){
+                mainWindow.webContents.send('heartbeat', {
+                    data: response.data,
+                    ok: response.status === 200
+                });
+            }else{
+                mainWindow.webContents.send('heartbeat', {
+                    data: null,
+                    ok: false
+                });
+            }
+        })
+        .catch((error) => {
+            mainWindow.webContents.send('heartbeat', {
+                data: null,
+                ok: false
+            });
+        })
+    });
 
 };
 
