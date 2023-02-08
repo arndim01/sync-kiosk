@@ -4,6 +4,7 @@ import Wrapper from '../../components/Wrapper';
 import React from 'react';
 import InsertMoneyDialog from '../../components/DialogBox/InsertMoneyDialog';
 import electron from 'electron';
+import AlertDialog from '../../components/DialogBox/AlertDialog';
 
 const ipcRenderer = electron.ipcRenderer || false;
 
@@ -26,6 +27,7 @@ const TransactionForm = () => {
     const [numdisplay, setNumdisplay] = React.useState("09");
     const [error, setError] = React.useState(false);
     const [initialTransaction, setInitialTransaction] = React.useState(null);
+    const [alert, setAlert] = React.useState(false);
 
     const handleNumValue = (value) =>{ 
         setError(false);
@@ -45,8 +47,19 @@ const TransactionForm = () => {
         setNumdisplay(currentValue);
     };
 
+    const handlePopupAlertOpen = () => {
+        if( numdisplay.length === 11 ){
+            setAlert(true);
+        }else{
+            setError(true);
+        }
+    }
+    const handlePopupAlertClose = () => {
+        setAlert(false);
+    };
+
     const handleProc = () =>{
-        
+        setAlert(false);
         if( numdisplay.length !== 11 ){
             setError(true);
             return;
@@ -82,7 +95,7 @@ const TransactionForm = () => {
                                           
                                         } 
                                     )}
-                                    <li className={styles.space + ' ' + styles.clearl} onClick={handleProc} >Proceed</li>
+                                    <li className={styles.space + ' ' + styles.clearl} onClick={handlePopupAlertOpen} >Proceed</li>
                                 </ul>
                                 {
                                     error &&
@@ -102,6 +115,7 @@ const TransactionForm = () => {
                         </div>
                         
                     </Grid>
+                    <AlertDialog title={`${numdisplay}`} content="Are you sure this is the correct account number?" openWindow={alert} closable={true} callback={handleProc} handleClose={handlePopupAlertClose}/>
                     <InsertMoneyDialog initialTransaction={initialTransaction} />
                 </Grid>
                 

@@ -1,11 +1,14 @@
 import AlertDialog from '../components/DialogBox/AlertDialog';
-import { GetSyncAppStatus } from '../api-lib/hooks/sync';
+import { useRouter } from 'next/router';
 import electron from 'electron';
 import React from 'react';
 const ipcRenderer = electron.ipcRenderer || false;
+
+
 const MaintenanceAlert = () => {
     const [open, setOpen] = React.useState(false);
-
+    const router = useRouter();
+    
     React.useEffect(() => {
         let interval = setInterval( () => {
             ipcRenderer.send('getHeartbeat');
@@ -24,6 +27,13 @@ const MaintenanceAlert = () => {
           ipcRenderer.removeAllListeners('heartbeat');
         }
     }, []);
+
+    React.useEffect( () => {
+        if( open ){
+            router.push('/home');
+        }
+
+    }, [open]);
 
     return(
         <>

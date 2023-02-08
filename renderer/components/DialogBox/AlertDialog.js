@@ -6,24 +6,18 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-const AlertDialog = ({ title, content, openWindow, closable, callback }) => {
+const AlertDialog = ({ title, content, openWindow, closable, callback, handleClose }) => {
 
     const [open, setOpen] = React.useState(false);
-
-
-    console.log(openWindow);
-
     React.useEffect( () => { 
 
         if( openWindow ) setOpen(true)
         else setOpen(false)
 
     }, [openWindow]);
-
-    const handleClose = () => {
+    const close = () => {
         setOpen(false);
     };
-
     return (
         <div>
           <Dialog
@@ -43,15 +37,19 @@ const AlertDialog = ({ title, content, openWindow, closable, callback }) => {
               {
                 closable &&
                 <>
-                    <Button onClick={handleClose}>Disagree</Button>
+                    <Button onClick={() => {
+                      if( handleClose != null){
+                        handleClose();
+                      }
+                      close();
+                    }}>No</Button>
                     <Button onClick={() =>{
-                        if( callback != null){
-                            callback();
-                        }
-                        handleClose(); 
-                    
+                      if( callback != null){
+                        callback();
+                      }
+                      close(); 
                     }
-                    } autoFocus>Agree</Button>
+                    }>Yes</Button>
                 </>    
               }
               

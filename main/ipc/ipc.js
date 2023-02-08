@@ -4,19 +4,9 @@ require('dotenv').config();
 var axios = require('axios');
 const store = new Store();
 
+//I need check for serial-port if-open and display popup alert
 
 const init = (mainWindow) => {
-
-    ipcMain.on('getConfig', (event, arg) => {
-        event.returnValue = {
-            API_HEARTBEAT_URL: process.env.API_QUEUE_URL,
-            TOKEN: process.env.TOKEN,
-            ACC: process.env.ACC,
-            PWD: process.env.PWD,
-            IsProd: process.env.NODE_ENV === 'production',
-        };
-    });
-    
     ipcMain.on('createTransaction', (event, arg) => {
         const headers = {
             'Content-Type': 'application/json',
@@ -39,8 +29,6 @@ const init = (mainWindow) => {
         .then((response) => {
             console.log(response);
             if( response.status == 201){
-                console.log("event successful");
-
                 mainWindow.webContents.send('handleTransaction', {
                     data: response.data,
                     ok: response.status === 201
@@ -53,7 +41,9 @@ const init = (mainWindow) => {
             }
         })
         .catch((error) => {
-            console.log(error);
+
+            //Handler Error Notification
+
             mainWindow.webContents.send('handleTransaction', {
                 data: null,
                 ok: false
@@ -81,6 +71,9 @@ const init = (mainWindow) => {
             }
         })
         .catch((error) => {
+
+            //Handler Error Notification
+
             mainWindow.webContents.send('heartbeat', {
                 data: null,
                 ok: false
