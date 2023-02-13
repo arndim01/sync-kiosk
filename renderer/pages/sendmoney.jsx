@@ -8,7 +8,7 @@ function SendMoneyPage() {
 
   const props ={
     main: false,
-    previous_page: "/home",
+    previous_page: "/home.html",
     page_title: "Send Money"
   };
 

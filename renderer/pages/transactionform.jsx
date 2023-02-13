@@ -6,7 +6,7 @@ function TransactionFormPage(){
 
     const props ={
         main: false,
-        previous_page: "/sendmoney",
+        previous_page: "/sendmoney.html",
         page_title: "Transfer Money"
     };
 

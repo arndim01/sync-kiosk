@@ -1,6 +1,6 @@
-appId: com.example.nextron
-productName: My Nextron App
-copyright: Copyright © 2018 Yoshihide Shiono
+appId: com.syncappkiosk.nextron
+productName: syncappkiosk
+copyright: Copyright © 2023 syncappkiosk
 directories:
   output: dist
   buildResources: resources

@@ -25,7 +25,7 @@ const Mainlist = () => {
                 },
             }}
             >
-                <Button variant="outlined" href='/sendmoney' >
+                <Button variant="outlined" href='/sendmoney.html' >
                     <Grid container spacing={0}>    
                         <Grid paddingTop={2} item xs={12} textAlign="center">    
                             <Image 
