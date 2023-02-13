@@ -12,7 +12,11 @@ import Wrapper from '../../components/Wrapper';
 import Grid  from '@mui/material/Grid';
 import React from 'react';
 import electron from 'electron';
-
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { useRouter } from 'next/router';
 const ipcRenderer = electron.ipcRenderer || false;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -24,8 +28,12 @@ const InsertMoneyDialog = ({initialTransaction}) => {
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [isProceed, setIsProceed] = React.useState(false);
-    const [data, setData] = React.useState(null);
+    const [openReceipt, setOpenReceipt] = React.useState(false);
+    const [receipt, setReceipt] = React.useState(null);
     const [inserted, setInserted] = React.useState(false);
+    const [count, setCount] = React.useState(0);
+    const [reference, setReference] = React.useState("");
+    const router = useRouter();
 
     React.useEffect( () => {
 
@@ -40,11 +48,11 @@ const InsertMoneyDialog = ({initialTransaction}) => {
         ipcRenderer.on('handleTransaction', (event, data) => {
             setLoading(false);
             if( data.ok ){
-                setData(data.data);
+                setReference(data.data.referenceNumber);
+                ipcRenderer.send('open-coin');
             }else{
                 setOpen(false);
             }
-
         });
 
         return () => {
@@ -53,27 +61,84 @@ const InsertMoneyDialog = ({initialTransaction}) => {
       }, []);
 
     React.useEffect( () => {
-        ipcRenderer.on('handleProceed', (event, data) => {
-            setLoading(false);
-            if( data.ok ){
-                setData(data.data);
-            }else{
-                setOpen(false);
-            }
-
+        ipcRenderer.on('handleCoinData', (event, data) => {
+            ipcRenderer.send('update-logs', { amount: parseInt(data.data)});
+            setCount(count => count + parseInt(data.data));
+            setIsProceed(true);
+            setInserted(true);
         });
-
         return () => {
-            ipcRenderer.removeAllListeners('handleTransaction');
+            ipcRenderer.removeAllListeners('handleCoinData');
         }
-      }, []);
+    }, []);
 
     const handleClose = () => {
+        ipcRenderer.send('close-coin');
         setOpen(false);
+        setCount(0);
+        setIsProceed(false);
+        setInserted(false);
+        setOpenReceipt(false);
+        setReceipt(null);
+        setReference("");
     };
+
+    const sendFinalRequest = () =>{
+        let {reference, totalCashIn, fee } = ipcRenderer.sendSync('calculate');
+        ipcRenderer.send('sendRequest', { reference, totalCashIn, fee });
+        ipcRenderer.send('close-coin');
+        router.push('/sendmoney');
+    };
+
+    const handleOpenReceipt = () => {
+        let {reference, totalCashIn, fee } = ipcRenderer.sendSync('calculate');
+        let rcalculate = {
+            referenceNumber: reference,
+            amount: totalCashIn,
+            fee: fee   
+        }
+        setReceipt(rcalculate);
+        setOpenReceipt(true);
+    }
+
+    const hadleCloseReceipt = () =>{
+        setOpenReceipt(false);
+    }
 
     return(
         <>
+            {/* <AlertDialog
+                openWindow={openReceipt} 
+                title="Cash In"
+                callback={sendFinalRequest}
+                handleClose={handleClose}
+                content={<ReceiptContent props={receipt} />}
+            /> */}
+
+            <Dialog
+                open={openReceipt}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    Review - Cash In 
+                </DialogTitle>
+                <DialogContent>
+                        {
+                            receipt &&
+                            <>
+                                <div><strong>Reference Number: {receipt.referenceNumber}</strong></div>
+                                <div><strong>Cash In Amount: {receipt.amount} PHP</strong></div>
+                                <div><strong>Fee: {receipt.fee} PHP</strong></div>
+                            </>
+                        }
+                </DialogContent>
+                <DialogActions>
+                        <Button onClick={hadleCloseReceipt}>No</Button>
+                        <Button onClick={sendFinalRequest}>Yes</Button>
+                </DialogActions>
+            </Dialog>
+
             <Dialog
                 fullScreen
                 open={open}
@@ -101,7 +166,7 @@ const InsertMoneyDialog = ({initialTransaction}) => {
                     <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                         Insert Bills Or Coins
                     </Typography>
-                    <Button color="inherit" sx={{ visibility: isProceed ? 'visible': 'hidden' }}>
+                    <Button onClick={handleOpenReceipt} color="inherit" sx={{ visibility: isProceed ? 'visible': 'hidden' }}>
                         Proceed
                     </Button>
                 </Toolbar>
@@ -109,18 +174,14 @@ const InsertMoneyDialog = ({initialTransaction}) => {
                 <Wrapper>
                     <Grid container spacing={0}>
                         <Grid item xs={12}>
-
-
                             {
-                                data && !loading &&
+                                reference && !loading &&
                                 <div>
-                                    <p><strong>Reference No.: </strong> { data ? data.referenceNumber: "" }</p>
+                                    <p><strong>Reference No.: </strong> { reference ? reference: "" }</p>
                                     <p><strong>GCash Account: </strong> { initialTransaction? initialTransaction.gcashAccount: "" } </p>
-                                    <p><strong>Amount: </strong> 0 PHP</p>
-                                    <p><strong>Conv. Fee: </strong> 10 PHP</p>
+                                    <p><strong>Inserted Amount: </strong> { count } PHP</p>
                                 </div>
                             }
-                            
                         </Grid>
                     </Grid>
                 </Wrapper>

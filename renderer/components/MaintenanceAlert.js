@@ -30,9 +30,9 @@ const MaintenanceAlert = () => {
 
     React.useEffect( () => {
         if( open ){
+            ipcRenderer.send('close-coin');
             router.push('/home');
         }
-
     }, [open]);
 
     return(

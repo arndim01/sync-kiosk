@@ -19,7 +19,7 @@ const AlertDialog = ({ title, content, openWindow, closable, callback, handleClo
         setOpen(false);
     };
     return (
-        <div>
+        <>
           <Dialog
             open={open}
             aria-labelledby="alert-dialog-title"
@@ -55,7 +55,7 @@ const AlertDialog = ({ title, content, openWindow, closable, callback, handleClo
               
             </DialogActions>
           </Dialog>
-        </div>
+        </>
     );
 };
 

@@ -20,15 +20,17 @@ const init = (mainWindow) => {
             name: "",
             amount: 0,
             currency: "PHP",
-            attempt: "queue"
+            attempt: "pending"
         };
           
         axios.post(process.env.API_TRANSACTION_URL, data, {
             headers: headers
         })
         .then((response) => {
-            console.log(response);
+            console.log(process.env.API_TRANSACTION_URL + ": " + response.status);
             if( response.status == 201){
+                store.set('rNumber', response.data.referenceNumber);
+                store.set('rAmount', 0);
                 mainWindow.webContents.send('handleTransaction', {
                     data: response.data,
                     ok: response.status === 201
