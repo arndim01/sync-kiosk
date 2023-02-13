@@ -16,10 +16,8 @@ if (isProd) {
   await app.whenReady();
 
   const mainWindow = createWindow('main', {
-    width: 1000,
-    height: 600,
-    frame: false,
-    fullscreen: true
+    width: 800,
+    height: 500,
   });
   
   // mainWindow.webContents.on('dom-ready', (event)=> {
