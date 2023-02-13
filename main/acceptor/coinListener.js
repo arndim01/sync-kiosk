@@ -53,7 +53,7 @@ const init = (mainWindow, port) => {
         }
         const data = {
             acc: process.env.ACC,
-            password: process.env.PWD,
+            password: process.env.ACCPWD,
             referenceNumber: store.get('rNumber'),
             amount: amount,
             currency: "PHP",
@@ -82,7 +82,7 @@ const init = (mainWindow, port) => {
 
         const data = {
             acc: process.env.ACC,
-            password: process.env.PWD,
+            password: process.env.ACCPWD,
             referenceNumber: reference,
             cashIn: totalCashIn,
             fee: fee

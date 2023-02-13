@@ -17,7 +17,9 @@ if (isProd) {
 
   const mainWindow = createWindow('main', {
     width: 800,
-    height: 500,
+    height: 600,
+    frame: false,
+    fullscreen: true
   });
   
   // mainWindow.webContents.on('dom-ready', (event)=> {
@@ -32,8 +34,6 @@ if (isProd) {
   } else {
     const port = process.argv[2];
     await mainWindow.loadURL(`http://localhost:${port}/home`);
-    await mainWindow.loadURL(`http://localhost:${port}/sendmoney`);
-    await mainWindow.loadURL(`http://localhost:${port}/transactionform`);
     //mainWindow.webContents.openDevTools();
   }
 })();

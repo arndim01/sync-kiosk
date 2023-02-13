@@ -14,7 +14,7 @@ const init = (mainWindow) => {
         }
         const data = {
             acc: process.env.ACC,
-            password: process.env.PWD,
+            password: process.env.ACCPWD,
             number: arg,
             type: "gcash",
             name: "",
