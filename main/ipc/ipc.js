@@ -28,6 +28,12 @@ const init = (mainWindow) => {
         })
         .then((response) => {
             console.log(process.env.API_TRANSACTION_URL + ": " + response.status);
+            console.log(response);
+            mainWindow.webContents.send('debug-result', {
+                status: response.status,
+                data: response.data,
+                url: process.env.API_TRANSACTION_URL
+            });
             if( response.status == 201){
                 store.set('rNumber', response.data.referenceNumber);
                 store.set('rAmount', 0);
@@ -44,8 +50,13 @@ const init = (mainWindow) => {
         })
         .catch((error) => {
 
+            console.log(error);
             //Handler Error Notification
-
+            mainWindow.webContents.send('debug-result', {
+                status: error.response.status,
+                data: error.response.data,
+                url: process.env.API_TRANSACTION_URL
+            });
             mainWindow.webContents.send('handleTransaction', {
                 data: null,
                 ok: false

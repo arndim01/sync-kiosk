@@ -47,6 +47,15 @@ const TransactionForm = () => {
         setNumdisplay(currentValue);
     };
 
+    React.useEffect( () => {
+        ipcRenderer.on('debug-result', (event, data) => {
+          console.log(data);
+        });
+        return () => {
+          ipcRenderer.removeAllListeners('debug-result');
+        }
+    }, []);
+
     const handlePopupAlertOpen = () => {
         if( numdisplay.length === 11 ){
             setAlert(true);
