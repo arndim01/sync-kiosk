@@ -17,3 +17,8 @@
     - build-on: [ amd64 ]
     - build-on: [ arm64 ]
   
+  parts:
+    sync-kiosk:
+      # See 'snapcraft plugins'
+      plugin: nil
+  
