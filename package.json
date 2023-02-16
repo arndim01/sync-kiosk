@@ -4,11 +4,13 @@
   "description": "syncappkiosk",
   "version": "1.0.0",
   "author": "syncappkiosk@gmail.com",
-  "main": "app/background.js",
+  "main": "main/background.js",
   "scripts": {
     "dev": "nextron",
+    "dist": "electron-builder --linux snap",
     "build": "nextron build",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "electron-build-linux": "electron-builder --linux -c.extraMetadata.main=build/electron.js"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -25,6 +27,8 @@
   "devDependencies": {
     "electron": "^21.3.3",
     "electron-builder": "^23.6.0",
+    "electron-installer-snap": "^5.2.0",
+    "electron-packager": "^17.1.1",
     "next": "^12.3.4",
     "nextron": "^8.5.0",
     "react": "^18.2.0",
